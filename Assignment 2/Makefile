@@ -10,7 +10,7 @@ TARGET = 6_A2
 all: $(TARGET) test # Remove 'test' if you don't want to run it automatically, clean just removes the out file and lex.yy.c
 
 $(TARGET): $(TARGET).c lex.yy.c
-	$(CC) -o $@ $^ -ll
+	$(CC) -o $@ $^ 
 
 $(TARGET).c: $(TARGET).l
 	$(LEX) -o$@ $<
