@@ -16,7 +16,7 @@ ASOP [^=><!]=[^=]
 KEYWORD for|do|while|if|else
 SPECIAL [(){}\[\],]
 STRCONST \"(\\.|[^"\\])*\"
-CHARCONST '.'
+CHARCONST '(\\'|\\\"|\\\?|\\\\|\\a|\\b|\\f|\\n|\\r|\\t|\\v)'
 PUNC ";"
 COMMENTS "//".*|\/\*.*\*\/
 
@@ -24,41 +24,41 @@ COMMENTS "//".*|\/\*.*\*\/
 
 {COMMENTS} ;
 
-int|char|void|int\*|char\*|void\* { printf("<Data Type Keyword, %s > ", yytext); }
+int|char|void|int\*|char\*|void\* { printf("<KEYWORD,%s>", yytext); }
 
-{KEYWORD} { printf("<Keyword, %s > ", yytext); }
+{KEYWORD} { printf("<KEYWORD,%s>", yytext); }
 
-{CHARCONST} { printf("<Character Literal, %s > ", yytext); }
+{CHARCONST} { printf("<CONSTANT,%s>", yytext); }
 
-{STRCONST} { printf("<String Literal, %s > ", yytext); }
+{STRCONST} { printf("<STRING-LITERAL,%s>", yytext); }
 
-[a-zA-z_]{ALPHANUM}* { printf("<Identifier, %s > ", yytext); }
+{ALPHA}{ALPHANUM}* { printf("<IDENTIFIER,%s>", yytext); }
 
--{DIGIT}+|{DIGIT}+ { printf("<Integer Literal, %s > ", yytext); }
+-{DIGIT}+|{DIGIT}+ { printf("<CONSTANT,%s>", yytext); }
 
-(-{DIGIT}+"."{DIGIT}*)|({DIGIT}+"."{DIGIT}*) { printf("<Float Literal, %s > ", yytext); }
+(-{DIGIT}+"."{DIGIT}*)|({DIGIT}+"."{DIGIT}*) { printf("<CONSTANT,%s>", yytext); }
 
-{PUNC} { printf("<Punctuatuation, %s > ", yytext); }
+{PUNC} { printf("<PUNCTUATUATION,%s>", yytext); }
 
-{SPECIAL} { printf("<Special Character, %s > ", yytext); }
+{SPECIAL} { printf("<PUNCTUATUATION,%s>", yytext); }
 
-{AOP} { printf("<Arithmetic Operator, %s > ", yytext); }
+{AOP} { printf("<PUNCTUATUATION,%s>", yytext); }
 
-{ROP} { printf("<Realtional Operator, %s > ", yytext); }
+{ROP} { printf("<PUNCTUATUATION,%s>", yytext); }
 
-{LOP} { printf("<Logical Operator, %s > ", yytext); }
+{LOP} { printf("<PUNCTUATUATION,%s>", yytext); }
 
-{COP} { printf("<Conditional Operator, %s > ", yytext); }
+{COP} { printf("<PUNCTUATUATION,%s>", yytext); }
 
-{POP} { printf("<Pointer Operator, %s > ", yytext); }
+{POP} { printf("<PUNCTUATUATION,%s>", yytext); }
 
-{ASOP} { printf("<Assignment Operator, %s > ", yytext); }
+{ASOP} { printf("<PUNCTUATUATION,%s>", yytext); }
 
 {SPACE}+ ; 
 
 "\n" {printf("\n");}
 
-. { printf("<Invalid Token, %s > ", yytext); yyterminate(); /* using yyterminate() to stop the execution of the lexer */}
+. { printf("<Invalid Token,%s>", yytext); yyterminate(); /* using yyterminate() to stop the execution of the lexer */}
 
 %%
 

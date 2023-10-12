@@ -15,7 +15,7 @@ OUTPUT_BINARY = lexer
 
 # Compile commands
 all: lex.yy.c
-	$(CC) lex.yy.c $(C_FILE) -o $(OUTPUT_BINARY) -ll
+	$(CC) lex.yy.c $(C_FILE) -o $(OUTPUT_BINARY) -lfl
 
 lex.yy.c: $(LEX_FILE)
 	$(FLEX) $(LEX_FILE)

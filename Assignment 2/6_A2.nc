@@ -68,6 +68,7 @@ int factIt() { // Iterative factorial
     int n;
     int i = 0;
     int r = 1;
+    char a = '\n'
     readInt(&n);
     for(i = 1; i <= n; i = i + 1)
     r = r * i;
