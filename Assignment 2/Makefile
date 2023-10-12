@@ -1,27 +1,29 @@
-CC = gcc # CC = C Compiler
-LEX = flex # LEX = fLEX
+# Makefile for lexer
 
-# Target binary name
-TARGET = 6_A2
+# Compiler
+CC = gcc
 
-# List of secondary files that should not be deleted on failure
-.SECONDARY: $(TARGET).c
+# Flex
+FLEX = flex
 
-all: $(TARGET) test # Remove 'test' if you don't want to run it automatically, clean just removes the out file and lex.yy.c
+# Source files
+LEX_FILE = 6_A2.l
+C_FILE = 6_A2.c
 
-$(TARGET): $(TARGET).c lex.yy.c
-	$(CC) -o $@ $^ 
+# Output binary
+OUTPUT_BINARY = lexer
 
-$(TARGET).c: $(TARGET).l
-	$(LEX) -o$@ $<
+# Compile commands
+all: lex.yy.c
+	$(CC) lex.yy.c $(C_FILE) -o $(OUTPUT_BINARY) -ll
 
-lex.yy.c: $(TARGET).l
-	$(LEX) $<
+lex.yy.c: $(LEX_FILE)
+	$(FLEX) $(LEX_FILE)
+
+test:
+	./$(OUTPUT_BINARY) < 6_A2.nc
 
 clean:
-	rm -f $(TARGET) lex.yy.c
+	rm -f lex.yy.c $(OUTPUT_BINARY)
 
-test: $(TARGET)
-	./$(TARGET) < $(TARGET).nc
-
-.PHONY: all clean test
+build: clean all
