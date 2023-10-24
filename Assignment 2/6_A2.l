@@ -3,8 +3,8 @@
 %}
 
 DIGIT [0-9]
-LETTER [a-zA-Z]
-ALPHA ({LETTER}|_)
+LETTER [_a-zA-Z]
+ALPHA ({LETTER})
 ALPHANUM ({ALPHA}|{DIGIT})
 SPACE [ \t]
 AOP [\-\+\/\*\%]
@@ -15,8 +15,8 @@ POP &|\*|(->)
 ASOP [^=><!]=[^=]
 KEYWORD for|do|while|if|else
 SPECIAL [(){}\[\],]
-STRCONST \"(\\.|[^"\\])*\"
-CHARCONST '(\\'|\\\"|\\\?|\\\\|\\a|\\b|\\f|\\n|\\r|\\t|\\v)'
+STRCONST \"(\\['"?\\abfnrtv]|[^"\\\n])*\"
+CHARCONST \'(\\['"?\\abfnrtv]|[^'\\\n])*\'
 PUNC ";"
 COMMENTS "//".*|\/\*.*\*\/
 
