@@ -18,11 +18,14 @@ SPECIAL [(){}\[\],]
 STRCONST \"(\\['"?\\abfnrtv]|[^"\\\n])*\"
 CHARCONST \'(\\['"?\\abfnrtv]|[^'\\\n])*\'
 PUNC ";"
-COMMENTS "//".*|\/\*.*\*\/
+COMMENTS \/\/[^\n]*
+M-COMMENTS "/*"([^*]|\*+[^*/])*\*+"/"
 
 %%
 
 {COMMENTS} ;
+
+{M-COMMENTS} ;
 
 int|char|void|int\*|char\*|void\* { printf("<KEYWORD,%s>", yytext); }
 
