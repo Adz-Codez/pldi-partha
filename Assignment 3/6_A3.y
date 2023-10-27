@@ -4,9 +4,12 @@
     void yyerror(char *s);
 %}
 
-%token ID, constant, STRING_LITERAL, OP_PARENTHESIS, CL_PARENTHESIS 
+%token ID, constant, STRING_LITERAL, OP_PARENTHESIS, CL_PARENTHESIS, OP_ARROW, OP_SQUARE_BRACKET
+%token CL_SQUARE_BRACKET, INTEGER_CONSTANT, CHARACTER_CONSTANT, OP_COMMA, OP_ASSIGNMENT, OP_ADDITION
+%token 
 
-%type // list types here
+%type primary_expression, constant, postfix_expression, argument_expression_list_opt, argument_expression_list
+%type unary_expression, multiplicative_expression, additive_expression, relational_expression, equality_expression
 
 %%
 // First we fill in the grammar rules for expressions
@@ -30,11 +33,10 @@ postfix_expression: primary_expression {printf("postfix-expression\n");}
 argument_expression_list_opt: argument_expression_list
     | ; // empty (epsilon) production
 
-postfix-expression: // Expressions with postfix operators. Left assoc. in C; non-assoc. here
-    primary-expression
-    postfix-expression [ expression ] // 1-D array access
-    postfix-expression ( argument-expression-listopt ) // Function invocation
-    postfix-expression -> identifier // Pointer indirection. Only one level
+postfix-expression: primary_expression {printf("primary-expression\n");}
+    | postfix_expression OP_SQUARE_BRACKET expression CL_SQUARE_BRACKET {printf("postfix-expression\n");}
+    | postfix_expression OP_PARENTHESIS argument_expression_list_opt CL_PARENTHESIS {printf("postfix-expression\n");}
+    | postfix_expression OP_ARROW ID {printf("postfix-expression\n");}
 
 argument-expression-list:
     assignment-expression
