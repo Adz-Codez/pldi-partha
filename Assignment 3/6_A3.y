@@ -48,82 +48,6 @@
 %token CHARACTER_CONSTANT
 
 %%
-
-primary_expression: ID {printf("primary-expression\n");}
-    | constant {printf("primary-expression\n");}
-    | STRING_LITERAL {printf("primary-expression\n");}
-    | OP_PARENTHESIS expression CL_PARENTHESIS {printf("primary-expression\n");}
-    ;
-
-constant: INTEGER_CONSTANT
-    | CHARACTER_CONSTANT;
-
-postfix_expression: primary_expression {printf("postfix-expression\n");}
-    | postfix_expression OP_SQUARE_BRACKET expression CL_SQUARE_BRACKET {printf("postfix-expression\n");}
-    | postfix_expression OP_PARENTHESIS argument_expression_list_opt CL_PARENTHESIS {printf("postfix-expression\n");}
-    | postfix_expression OP_ARROW ID {printf("postfix-expression\n");}
-    ;
-
-argument_expression_list_opt: argument_expression_list
-    | ;
-
-argument_expression_list: assignment_expression {printf("argument-expression-list\n");}
-                        | argument_expression_list OP_COMMA assignment_expression {printf("argument-expression-list\n");}
-                        ;
-
-unary_expression: postfix_expression {printf("unary-expression\n");}
-                | unary_operator unary_expression {printf("unary-expression\n");}
-                ;
-
-unary_operator: OP_ADDR {printf("unary-operator\n");}
-            | OP_DEREF {printf("unary-operator\n");}
-            | OP_SIGNP {printf("unary-operator\n");}
-            | OP_SIGNN {printf("unary-operator\n");}
-            | OP_NOT {printf("unary-operator\n");}
-            ;
-
-multiplicative_expression: unary_expression {printf("multiplicative-expression\n");}
-                      | multiplicative_expression OP_DEREF unary_expression {printf("multiplicative-expression\n");}
-                      | multiplicative_expression OP_SLASH unary_expression {printf("multiplicative-expression\n");}
-                      | multiplicative_expression OP_MOD unary_expression {printf("multiplicative-expression\n");}
-                      ;
-
-additive_expression: multiplicative_expression {printf("additive-expression\n");}
-                | additive_expression OP_SIGNP multiplicative_expression {printf("additive-expression\n");}
-                | additive_expression OP_SIGNN multiplicative_expression {printf("additive-expression\n");}
-                ;
-
-relational_expression: additive_expression {printf("relational-expression\n");}
-                  | relational_expression OP_SLESS additive_expression {printf("relational-expression\n");}
-                  | relational_expression OP_SGREAT additive_expression {printf("relational-expression\n");}
-                  | relational_expression OP_LEQ additive_expression {printf("relational-expression\n");}
-                  | relational_expression OP_GEQ additive_expression {printf("relational-expression\n");}
-                  ;
-
-equality_expression: relational_expression {printf("equality-expression\n");}
-                | equality_expression OP_EQUALITY relational_expression {printf("equality-expression\n");}
-                | equality_expression OP_NEQ relational_expression {printf("equality-expression\n");}
-                ;
-
-logical_AND_expression: equality_expression {printf("logical-AND-expression\n");}
-                   | logical_AND_expression OP_AND equality_expression {printf("logical-AND-expression\n");}
-                   ;
-
-logical_OR_expression: logical_AND_expression {printf("logical-OR-expression\n");}
-                    | logical_OR_expression OP_OR logical_AND_expression {printf("logical-OR-expression\n");}
-                    ;
-
-conditional_expression: logical_OR_expression OP_QUES expression OP_COLON conditional_expression {printf("conditional-expression\n");}
-                        | logical_OR_expression {printf("conditional-expression\n");}
-                        ;
-
-assignment_expression: unary_expression OP_ASSIGN assignment_expression {printf("assignment-expression\n");}
-                    | conditional_expression {printf("assignment-expression\n");}
-                    ;
-
-expression: assignment_expression {printf("expression\n");}
-            ;
-
 declaration: type_specifier init_declarator OP_SEMICOLON {printf("declaration\n");}
           ;
 
@@ -218,6 +142,81 @@ external_declaration: declaration {printf("external-declaration\n");}
 
 function_definition: type_specifier declarator compound_statement {printf("function-definition\n");}
                     ;
+
+primary_expression: ID {printf("primary-expression\n");}
+    | constant {printf("primary-expression\n");}
+    | STRING_LITERAL {printf("primary-expression\n");}
+    | OP_PARENTHESIS expression CL_PARENTHESIS {printf("primary-expression\n");}
+    ;
+
+constant: INTEGER_CONSTANT
+    | CHARACTER_CONSTANT;
+
+postfix_expression: primary_expression {printf("postfix-expression\n");}
+    | postfix_expression OP_SQUARE_BRACKET expression CL_SQUARE_BRACKET {printf("postfix-expression\n");}
+    | postfix_expression OP_PARENTHESIS argument_expression_list_opt CL_PARENTHESIS {printf("postfix-expression\n");}
+    | postfix_expression OP_ARROW ID {printf("postfix-expression\n");}
+    ;
+
+argument_expression_list_opt: argument_expression_list
+    | ;
+
+argument_expression_list: assignment_expression {printf("argument-expression-list\n");}
+                        | argument_expression_list OP_COMMA assignment_expression {printf("argument-expression-list\n");}
+                        ;
+
+unary_expression: postfix_expression {printf("unary-expression\n");}
+                | unary_operator unary_expression {printf("unary-expression\n");}
+                ;
+
+unary_operator: OP_ADDR {printf("unary-operator\n");}
+            | OP_DEREF {printf("unary-operator\n");}
+            | OP_SIGNP {printf("unary-operator\n");}
+            | OP_SIGNN {printf("unary-operator\n");}
+            | OP_NOT {printf("unary-operator\n");}
+            ;
+
+multiplicative_expression: unary_expression {printf("multiplicative-expression\n");}
+                      | multiplicative_expression OP_DEREF unary_expression {printf("multiplicative-expression\n");}
+                      | multiplicative_expression OP_SLASH unary_expression {printf("multiplicative-expression\n");}
+                      | multiplicative_expression OP_MOD unary_expression {printf("multiplicative-expression\n");}
+                      ;
+
+additive_expression: multiplicative_expression {printf("additive-expression\n");}
+                | additive_expression OP_SIGNP multiplicative_expression {printf("additive-expression\n");}
+                | additive_expression OP_SIGNN multiplicative_expression {printf("additive-expression\n");}
+                ;
+
+relational_expression: additive_expression {printf("relational-expression\n");}
+                  | relational_expression OP_SLESS additive_expression {printf("relational-expression\n");}
+                  | relational_expression OP_SGREAT additive_expression {printf("relational-expression\n");}
+                  | relational_expression OP_LEQ additive_expression {printf("relational-expression\n");}
+                  | relational_expression OP_GEQ additive_expression {printf("relational-expression\n");}
+                  ;
+
+equality_expression: relational_expression {printf("equality-expression\n");}
+                | equality_expression OP_EQUALITY relational_expression {printf("equality-expression\n");}
+                | equality_expression OP_NEQ relational_expression {printf("equality-expression\n");}
+                ;
+
+logical_AND_expression: equality_expression {printf("logical-AND-expression\n");}
+                   | logical_AND_expression OP_AND equality_expression {printf("logical-AND-expression\n");}
+                   ;
+
+logical_OR_expression: logical_AND_expression {printf("logical-OR-expression\n");}
+                    | logical_OR_expression OP_OR logical_AND_expression {printf("logical-OR-expression\n");}
+                    ;
+
+conditional_expression: logical_OR_expression OP_QUES expression OP_COLON conditional_expression {printf("conditional-expression\n");}
+                        | logical_OR_expression {printf("conditional-expression\n");}
+                        ;
+
+assignment_expression: unary_expression OP_ASSIGN assignment_expression {printf("assignment-expression\n");}
+                    | conditional_expression {printf("assignment-expression\n");}
+                    ;
+
+expression: assignment_expression {printf("expression\n");}
+            ;
 
 %%
 
