@@ -1,6 +1,6 @@
 %{
     /* Any definitions and/or declarations that are required by the lexer to work correctly*/
-    #include <y.tab.h>
+    #include "y.tab.h"
 %}
 
 DIGIT [0-9]
@@ -30,17 +30,17 @@ M-COMMENTS "/*"([^*]|\*+[^*/])*\*+"/"
 
 int|char|void|int\*|char\*|void\* { return KEYWORD; } // It should all be of this type 
 
-{KEYWORD} { printf("<KEYWORD,%s>", yytext); }
+{KEYWORD} { return KEYWORD; }
 
-{CHARCONST} { printf("<CONSTANT,%s>", yytext); }
+{CHARCONST} { return CHARACTER_CONSTANT; }
 
-{STRCONST} { printf("<STRING-LITERAL,%s>", yytext); }
+{STRCONST} { return STRING_LITERAL; }
 
-{ALPHA}{ALPHANUM}* { printf("<IDENTIFIER,%s>", yytext); }
+{ALPHA}{ALPHANUM}* { return ID; }
 
--{DIGIT}+|{DIGIT}+ { printf("<CONSTANT,%s>", yytext); }
+-{DIGIT}+|{DIGIT}+ { return INTEGER_CONSTANT; }
 
-(-{DIGIT}+"."{DIGIT}*)|({DIGIT}+"."{DIGIT}*) { printf("<CONSTANT,%s>", yytext); }
+(-{DIGIT}+"."{DIGIT}*)|({DIGIT}+"."{DIGIT}*) { return INTEGER_CONSTANT; }
 
 {PUNC} { printf("<PUNCTUATUATION,%s>", yytext); }
 
