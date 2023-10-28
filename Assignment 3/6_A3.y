@@ -3,6 +3,7 @@
     /* The are the C declarations and definitions for the Bison file*/
     extern char* yytext;
     extern int yylex();
+    void yyerror(char *s);
     void yyerror(char *s) {
     printf("Error: %s on '%s'\n", s, yytext);
     }

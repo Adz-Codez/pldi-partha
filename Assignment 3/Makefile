@@ -18,7 +18,9 @@ FLEX_FLAGS = -o $(FLEX_OUTPUT)
 CFLAGS = -Werror
 
 # Build rule
-build: $(EXECUTABLE)
+build: clean compile
+
+compile: $(EXECUTABLE)
 
 $(EXECUTABLE): $(FLEX_OUTPUT) $(BISON_OUTPUT) 6_A3.c
 	$(CC) -o $@ $^ -lfl $(CFLAGS)
@@ -33,4 +35,4 @@ $(FLEX_OUTPUT): $(FLEX_FILE)
 clean:
 	rm -f $(FLEX_OUTPUT) $(BISON_OUTPUT) $(BISON_OUTPUT:.c=.h) $(EXECUTABLE)
 
-.PHONY: build clean
+.PHONY: build compile clean
