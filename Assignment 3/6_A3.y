@@ -110,16 +110,16 @@ logical_AND_expression: equality_expression {printf("logical-AND-expression\n");
                    ;
 
 logical_OR_expression: logical_AND_expression {printf("logical-OR-expression\n");}
-                  | logical_OR_expression OP_OR logical_AND_expression {printf("logical-OR-expression\n");}
-                  ;
+                    | logical_OR_expression OP_OR logical_AND_expression {printf("logical-OR-expression\n");}
+                    ;
 
-conditional_expression: logical_OR_expression {printf("conditional-expression\n");}
-                   | logical_OR_expression OP_QUES expression OP_COLON conditional_expression {printf("conditional-expression\n");}
-                   ;
+conditional_expression: logical_OR_expression OP_QUES expression OP_COLON conditional_expression {printf("conditional-expression\n");}
+                        | logical_OR_expression {printf("conditional-expression\n");}
+                        ;
 
-assignment_expression: conditional_expression {printf("assignment-expression\n");}
-                  | unary_expression OP_ASSIGN assignment_expression {printf("assignment-expression\n");}
-                  ;
+assignment_expression: unary_expression OP_ASSIGN assignment_expression {printf("assignment-expression\n");}
+                    | conditional_expression {printf("assignment-expression\n");}
+                    ;
 
 expression: assignment_expression {printf("expression\n");}
             ;
@@ -220,8 +220,4 @@ function_definition: type_specifier declarator compound_statement {printf("funct
                     ;
 
 %%
-int main() {
-    yyparse();
-    return 0;
-}
 
