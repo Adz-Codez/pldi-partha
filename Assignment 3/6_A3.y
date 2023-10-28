@@ -48,50 +48,17 @@
 %token CHARACTER_CONSTANT
 
 %%
-declaration: type_specifier init_declarator OP_SEMICOLON {printf("declaration\n");}
-          ;
 
-init_declarator: declarator {printf("init-declarator\n");}
-              | declarator OP_ASSIGN initializer {printf("init-declarator\n");}
-              ;
-
-type_specifier: KEY_VOID {printf("type-specifier\n");}
-             | KEY_CHAR {printf("type-specifier\n");}
-             | KEY_INT {printf("type-specifier\n");}
-             ;
-
-declarator: pointer_opt direct_declarator {printf("declarator\n");}
-         ;
-
-pointer_opt: pointer
-            |
-            ;
-
-pointer: OP_DEREF {printf("pointer\n");}
-        ;
-
-direct_declarator: ID {printf("direct-declarator\n");}
-                | ID OP_SQUARE_BRACKET INTEGER_CONSTANT CL_SQUARE_BRACKET {printf("direct-declarator\n");}
-                | ID OP_PARENTHESIS parameter_list_opt CL_PARENTHESIS {printf("direct-declarator\n");}
+translation_unit: external_declaration {printf("translation-unit\n");}
+                | translation_unit external_declaration {printf("translation-unit\n");}
                 ;
 
-parameter_list_opt: parameter_list {printf("parameter-list\n");}
-                    |
+external_declaration: declaration {printf("external-declaration\n");}
+                    | function_definition {printf("external-declaration\n");}
                     ;
 
-parameter_list: parameter_declaration {printf("parameter-list\n");}
-             | parameter_list OP_COMMA parameter_declaration {printf("parameter-list\n");}
-             ;
-
-parameter_declaration: type_specifier pointer_opt identifier_opt {printf("parameter-declaration\n");}
-                   ;
-
-identifier_opt: ID
-            |
-            ;
-
-initializer: assignment_expression {printf("initializer\n");}
-          ;
+function_definition: type_specifier declarator compound_statement {printf("function-definition\n");}
+                    ;
 
 statement: compound_statement {printf("statement\n");}
         | expression_statement {printf("statement\n");}
@@ -132,16 +99,50 @@ iteration_statement: KEY_FOR OP_PARENTHESIS expression_opt OP_SEMICOLON expressi
 jump_statement: KEY_RETURN expression_opt OP_SEMICOLON {printf("jump-statement\n");}
              ;
 
-translation_unit: external_declaration {printf("translation-unit\n");}
-                | translation_unit external_declaration {printf("translation-unit\n");}
+declaration: type_specifier init_declarator OP_SEMICOLON {printf("declaration\n");}
+          ;
+
+init_declarator: declarator {printf("init-declarator\n");}
+              | declarator OP_ASSIGN initializer {printf("init-declarator\n");}
+              ;
+
+type_specifier: KEY_VOID {printf("type-specifier\n");}
+             | KEY_CHAR {printf("type-specifier\n");}
+             | KEY_INT {printf("type-specifier\n");}
+             ;
+
+declarator: pointer_opt direct_declarator {printf("declarator\n");}
+         ;
+
+pointer_opt: pointer
+            |
+            ;
+
+pointer: OP_DEREF {printf("pointer\n");}
+        ;
+
+direct_declarator: ID {printf("direct-declarator\n");}
+                | ID OP_SQUARE_BRACKET INTEGER_CONSTANT CL_SQUARE_BRACKET {printf("direct-declarator\n");}
+                | ID OP_PARENTHESIS parameter_list_opt CL_PARENTHESIS {printf("direct-declarator\n");}
                 ;
 
-external_declaration: declaration {printf("external-declaration\n");}
-                    | function_definition {printf("external-declaration\n");}
+parameter_list_opt: parameter_list
+                    |
                     ;
 
-function_definition: type_specifier declarator compound_statement {printf("function-definition\n");}
-                    ;
+parameter_list: parameter_declaration {printf("parameter-list\n");}
+             | parameter_list OP_COMMA parameter_declaration {printf("parameter-list\n");}
+             ;
+
+parameter_declaration: type_specifier pointer_opt identifier_opt {printf("parameter-declaration\n");}
+                   ;
+
+identifier_opt: ID
+            |
+            ;
+
+initializer: assignment_expression {printf("initializer\n");}
+          ;
 
 primary_expression: ID {printf("primary-expression\n");}
     | constant {printf("primary-expression\n");}

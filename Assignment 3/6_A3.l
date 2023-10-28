@@ -100,7 +100,7 @@ M_COMMENTS "/*"([^*]|\*+[^*/])*\*+"/"
 
 {SPACE}+ ; 
 
-"\n" {printf("\n");}
+"\n" ;
 
 . { yyterminate(); /* using yyterminate() to stop the execution of the lexer */}
 
