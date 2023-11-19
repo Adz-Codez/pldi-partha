@@ -10,7 +10,7 @@ ALPHA ({LETTER})
 ALPHANUM ({ALPHA}|{DIGIT})
 SPACE [ \t]
 STRCONST \"(\\['"?\\abfnrtv]|[^"\\\n])*\"
-CHARCONST \'(\\['"?\\abfnrtv]|[^'\\\n])*\'
+CHARCONST  '\''(\\['"?\\abfnrtv]|\\[0-7]{1,3}|\\x[0-9a-fA-F]+|[^'\\\n])+'\''
 COMMENTS \/\/[^\n]*
 M_COMMENTS \/\*([^*]|\*[^/])*\*\/
 
