@@ -12,7 +12,7 @@ SPACE [ \t]
 STRCONST \"(\\['"?\\abfnrtv]|[^"\\\n])*\"
 CHARCONST \'(\\['"?\\abfnrtv]|[^'\\\n])*\'
 COMMENTS \/\/[^\n]*
-M_COMMENTS "/*"([^*]|\*+[^*/])*\*+"/"
+M_COMMENTS \/\*([^*]|\*[^/])*\*\/
 
 %%
 

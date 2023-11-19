@@ -1,9 +1,14 @@
 // Forward declaration
 int factorial(int n);
 
-// Driver program to test the factorial function
+/* Driver program to test the factorial function
+testing comments */
 int main() {
     int num;
+    /*print statement
+    testing the comments
+    regex rule
+    */
     printStr("Enter a number to calculate its factorial: \n");
     readInt(&num);
 
