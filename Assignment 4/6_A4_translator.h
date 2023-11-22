@@ -10,7 +10,6 @@ typedef struct symtab
 {
     char *name;
     int value;
-    struct symbol_table *next; // Include a pointer to the next symbol table entry
 } symboltable;
 
 // We need to define the symlook function
