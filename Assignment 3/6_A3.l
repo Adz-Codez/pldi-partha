@@ -4,13 +4,13 @@
     #include "6_A3.tab.h"
 %}
 
-DIGIT [0-9]
+DIGIT 0|([1-9][0-9]*)
 LETTER [_a-zA-Z]
 ALPHA ({LETTER})
 ALPHANUM ({ALPHA}|{DIGIT})
 SPACE [ \t]
 STRCONST \"(\\['"?\\abfnrtv]|[^"\\\n])*\"
-CHARCONST  '\''(\\['"?\\abfnrtv]|\\[0-7]{1,3}|\\x[0-9a-fA-F]+|[^'\\\n])+'\''
+CHARCONST \"(\\['"?\\abfnrtv]|[^"\\\n])?\"
 COMMENTS \/\/[^\n]*
 M_COMMENTS \/\*([^*]|\*[^/])*\*\/
 
