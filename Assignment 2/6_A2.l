@@ -2,7 +2,7 @@
     
 %}
 
-DIGIT [0-9]
+DIGIT 0|([1-9][0-9]*)
 LETTER [_a-zA-Z]
 ALPHA ({LETTER})
 ALPHANUM ({ALPHA}|{DIGIT})
@@ -16,7 +16,7 @@ ASOP [^=><!]=[^=]
 KEYWORD for|do|while|if|else
 SPECIAL [(){}\[\],]
 STRCONST \"(\\['"?\\abfnrtv]|[^"\\\n])*\"
-CHARCONST \'(\\['"?\\abfnrtv]|[^'\\\n])*\'
+CHARCONST \'(\\['"?\\abfnrtv]|[^'\\\n])?\'
 PUNC ";"
 COMMENTS \/\/[^\n]*
 M_COMMENTS \/\*([^*]|\*[^/])*\*\/
