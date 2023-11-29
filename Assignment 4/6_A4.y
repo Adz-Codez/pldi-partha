@@ -15,6 +15,8 @@
     quad *qArray[NSYMS]; // This is the store of quads
     // We also need pointer/index to the next quad
     int nextquad = 0;
+
+    symboltable* symTable; // Include symbol table if needed for parsing
 %}
 
 %union {
@@ -24,7 +26,7 @@
 }
 
 %token <symp> ID
-%token <*strval> STRING_LITERAL
+%token <strval> STRING_LITERAL
 %token OP_PARENTHESIS
 %token CL_PARENTHESIS
 %token OP_ARROW
@@ -59,8 +61,8 @@
 %token KEY_RETURN
 %token OP_CURLY_BRACE
 %token CL_CURLY_BRACE
-%token INTEGER_CONSTANT
-%token CHARACTER_CONSTANT
+%token <intval> INTEGER_CONSTANT
+%token <strval> CHARACTER_CONSTANT
 
 %%
 

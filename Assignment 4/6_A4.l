@@ -5,13 +5,15 @@
     #include <stdlib.h>
 %}
 
+%option noyywrap
+
 DIGIT 0|([1-9][0-9]*)
 LETTER [_a-zA-Z]
 ALPHA ({LETTER})
 ALPHANUM ({ALPHA}|{DIGIT})
 SPACE [ \t]
 STRCONST \"(\\['"?\\abfnrtv]|[^"\\\n])*\"
-CHARCONST \"(\\['"?\\abfnrtv]|[^"\\\n])?\"
+CHARCONST \'(\\['"?\\abfnrtv]|[^'\\\n])?\'
 COMMENTS \/\/[^\n]*
 M_COMMENTS \/\*([^*]|\*[^/])*\*\/
 
@@ -35,15 +37,15 @@ M_COMMENTS \/\*([^*]|\*[^/])*\*\/
 
 "return" { return KEY_RETURN; }
 
-{CHARCONST} { return CHARACTER_CONSTANT; }
+{CHARCONST} { yylval.symp = symlook(yytext); return CHARACTER_CONSTANT; }
 
-{DIGIT}+ { return INTEGER_CONSTANT; }
+{DIGIT}+ { yylval.intval = atoi(yytext); return INTEGER_CONSTANT; }
 
-{STRCONST} { return STRING_LITERAL; }
+{STRCONST} { yylval.strval = strdup(yytext); return STRING_LITERAL; }
 
-{ALPHA}{ALPHANUM}* { return ID; }
+{ALPHA}{ALPHANUM}* { yylval.symp = symlook(yytext); return ID; }
 
-(-{DIGIT}+"."{DIGIT}*)|({DIGIT}+"."{DIGIT}*) { return INTEGER_CONSTANT; }
+(-{DIGIT}+"."{DIGIT}*)|({DIGIT}+"."{DIGIT}*) { yylval.intval = atof(yytext); return INTEGER_CONSTANT; }
 
 ";" { return OP_SEMICOLON; }
 
