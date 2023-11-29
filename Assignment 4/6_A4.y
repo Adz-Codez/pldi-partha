@@ -1,15 +1,29 @@
 %{
     #include <stdio.h>
+    #include <stdlib.h>
+    #include "6_A4_translator.h"
     /* The are the C declarations and definitions for the Bison file*/
+    
     extern char* yytext;
     extern int yylex();
+    
     void yyerror(char *s);
     void yyerror(char *s) {
     printf("Error: %s on '%s'\n", s, yytext);
     }
+
+    quad *qArray[NSYMS]; // This is the store of quads
+    // We also need pointer/index to the next quad
+    int nextquad = 0;
 %}
 
-%token ID
+%union {
+    int intval;
+    char *strval;
+    symboltable *symp;
+}
+
+%token <symp> ID
 %token STRING_LITERAL
 %token OP_PARENTHESIS
 %token CL_PARENTHESIS

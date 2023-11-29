@@ -1,7 +1,8 @@
 %{
     #include <stdio.h>
-    /* Any definitions and/or declarations that are required by the lexer to work correctly*/
-    #include "6_A3.tab.h"
+    #include <6_A4_translator.h>
+    #include <6_A4_translator.tab.h>
+    #include <stdlib.h>
 %}
 
 DIGIT 0|([1-9][0-9]*)
