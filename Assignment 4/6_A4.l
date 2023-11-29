@@ -1,7 +1,7 @@
 %{
+    #include "6_A4_translator.h"
+    #include "6_A4.tab.h"
     #include <stdio.h>
-    #include <6_A4_translator.h>
-    #include <6_A4_translator.tab.h>
     #include <stdlib.h>
 %}
 
