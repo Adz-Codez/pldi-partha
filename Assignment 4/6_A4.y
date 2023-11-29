@@ -24,7 +24,7 @@
 }
 
 %token <symp> ID
-%token STRING_LITERAL
+%token <*strval> STRING_LITERAL
 %token OP_PARENTHESIS
 %token CL_PARENTHESIS
 %token OP_ARROW
