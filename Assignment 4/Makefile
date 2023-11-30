@@ -1,16 +1,18 @@
-# Makefile for 6_A3
-
 # Compiler
 CC = gcc
 
 # Bison and Flex files
-BISON_FILE = 6_A3.y
-FLEX_FILE = 6_A3.l
+BISON_FILE = 6_A4.y
+FLEX_FILE = 6_A4.l
 
 # Output files
-BISON_OUTPUT = 6_A3.tab.c
+BISON_OUTPUT = 6_A4.tab.c
 FLEX_OUTPUT = lex.yy.c
-EXECUTABLE = parser
+EXECUTABLE = translator
+
+# Action file and header file
+ACTION_FILE = 6_A4_translator.c
+HEADER_FILE = 6_A4_translator.h
 
 # Flags
 BISON_FLAGS = --defines=$(BISON_OUTPUT:.c=.h) -o $(BISON_OUTPUT)
@@ -22,7 +24,7 @@ build: clean compile
 
 compile: $(EXECUTABLE)
 
-$(EXECUTABLE): $(FLEX_OUTPUT) $(BISON_OUTPUT) 6_A3.c
+$(EXECUTABLE): $(FLEX_OUTPUT) $(BISON_OUTPUT) $(ACTION_FILE) $(HEADER_FILE)
 	$(CC) -o $@ $^ -lfl $(CFLAGS)
 
 $(BISON_OUTPUT): $(BISON_FILE)
