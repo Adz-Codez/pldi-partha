@@ -16,19 +16,32 @@ extern char* yyget_text();
 symbolTable symtab[NSYMS];
 
 // Function to look up a symbol in the symbol table
-symbolTable* symlook(char* s) {
-    symbolTable* sp;
-    for (sp = symtab; sp < &symtab[NSYMS]; sp++) {
-        // Check if it exists
-        if (sp->symbols->name && strcmp(sp->symbols->name, s) == 0)
-            return sp;
-        // Check whether it is free
-        if (!sp->symbols->name) {
-            // Allocate memory for the symbol using strdup() and return the symbol table entry pointer
-            sp->symbols->name = strdup(s);
-            return sp;
+symbolTableEntry* symlook(char* s, symbolTable* table) {
+    symbolTableEntry* entry;
+    
+    // Check if the symbol already exists in the current table
+    for (entry = table->symbols; entry < &table->symbols[NSYMS]; entry++) {
+        if (entry->name && strcmp(entry->name, s) == 0)
+            return entry;
+    }
+
+    // Check if there is space to append a new entry
+    for (entry = table->symbols; entry < &table->symbols[NSYMS]; entry++) {
+        if (!entry->name) {
+            // Allocate memory for the symbol using strdup()
+            entry->name = strdup(s);
+            entry->symbol = (symbol*)malloc(sizeof(symbol)); // Allocate memory for the symbol
+            entry->symbol->name = entry->name; // Link the name in symbol to the entry name
+            entry->symbol->offset = 0; // Set initial offset
+            entry->symbol->nestedTable = NULL; // Initialize nested table to NULL (you can set it as needed)
+            entry->symbol->initVal = NULL; // Initialize initVal as needed
+            entry->symbol->isFunc = 0; // Initialize isFunc as needed
+            entry->symbol->size = 0; // Initialize size as needed
+
+            return entry;
         }
     }
+
     // Too many symbols
     printf("Too many symbols\n");
     exit(1);
@@ -40,8 +53,8 @@ symbolTable* gentemp() {
     char str[10]; // Temp name
     // Generate temp name
     sprintf(str, "t%02d", c++);
-    // Add temporary to the symbol table
-    return symlook(str);
+    // Add temporary to the global symbol table
+    return symlook(str, &symtab[0]);
 }
 
 // Updating the symbol table
@@ -63,6 +76,7 @@ void updateSymbolTable(symbolTable* table) {
         }
     }
 }
+
 
 // Output: symbol table
 
