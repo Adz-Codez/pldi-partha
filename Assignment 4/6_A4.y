@@ -23,7 +23,7 @@
 %union {
     int intval;
     char *strval;
-    symbolTable *symp;
+    symbolTableEntry *symp;
 }
 
 %token <symp> ID

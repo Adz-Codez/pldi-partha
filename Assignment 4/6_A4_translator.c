@@ -16,17 +16,17 @@ extern char* yyget_text();
 symbolTable symtab[NSYMS];
 
 // Function to look up a symbol in the symbol table
-symbolTableEntry* symlook(char* s, symbolTable* table) {
+symbolTableEntry* symlook(char* s) {
     symbolTableEntry* entry;
     
     // Check if the symbol already exists in the current table
-    for (entry = table->symbols; entry < &table->symbols[NSYMS]; entry++) {
+    for (entry = symtab->symbols; entry < &symtab->symbols[NSYMS]; entry++) {
         if (entry->name && strcmp(entry->name, s) == 0)
             return entry;
     }
 
     // Check if there is space to append a new entry
-    for (entry = table->symbols; entry < &table->symbols[NSYMS]; entry++) {
+    for (entry = symtab->symbols; entry < &symtab->symbols[NSYMS]; entry++) {
         if (!entry->name) {
             // Allocate memory for the symbol using strdup()
             entry->name = strdup(s);
@@ -48,13 +48,13 @@ symbolTableEntry* symlook(char* s, symbolTable* table) {
 }
 
 // Function to generate a temporary variable
-symbolTable* gentemp() {
+symbolTableEntry* gentemp() {
     static int c = 0; // Temp counter
     char str[10]; // Temp name
     // Generate temp name
     sprintf(str, "t%02d", c++);
     // Add temporary to the global symbol table
-    return symlook(str, &symtab[0]);
+    return symlook(str);
 }
 
 // Updating the symbol table
