@@ -214,7 +214,7 @@ void print_quad(quad* q, int index) {
 
 int main(int argc, char *argv[]) {
 
-    // Call the lexer
+    /*// Call the lexer
     if (yylex() != 0) {
     fprintf(stderr, "Lexer Error: Unable to lex the input: %s\n", yyget_text());
     exit(EXIT_FAILURE);
@@ -225,11 +225,14 @@ int main(int argc, char *argv[]) {
     if (yyparse() != 0) {
         fprintf(stderr, "Parser Error: Unable to parse the input.\n");
         exit(EXIT_FAILURE);
-    }
+    }*/
+
+    yylex();
+    yyparse();
 
     // print SymbolTable
     printf("Symbol Table:\n");
-    printSymbolTable(&symtab[0], "global", "null"); // Assuming symtab is your global symbol table
+    printSymbolTable(&symtab[0], "global", "null"); // Assuming symtab is the global symbol table
 
     // Print the TAC/quads
     printf("TAC:\n");

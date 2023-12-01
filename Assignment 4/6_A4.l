@@ -9,10 +9,10 @@
 DIGIT 0|([1-9][0-9]*)
 LETTER [_a-zA-Z]
 ALPHA ({LETTER})
-ALPHANUM ({ALPHA}|{DIGIT})
+ALPHANUM ({ALPHA}|{DIGIT}|_)
 SPACE [ \t]
 STRCONST \"(\\['"?\\abfnrtv]|[^"\\\n])*\"
-CHARCONST \'(\\['"?\\abfnrtv]|[^'\\\n])?\'
+CHARCONST \\'(\\['"?\\abfnrtv]|[^'\\\n])?\\'
 COMMENTS \/\/[^\n]*
 M_COMMENTS \/\*([^*]|\*[^/])*\*\/
 

@@ -138,9 +138,9 @@ pointer_opt: pointer
 pointer: OP_DEREF {printf("pointer\n");}
         ;
 
-direct_declarator: ID {printf("direct-declarator\n");}
-                | ID OP_SQUARE_BRACKET INTEGER_CONSTANT CL_SQUARE_BRACKET {printf("direct-declarator\n");}
-                | ID OP_PARENTHESIS parameter_list_opt CL_PARENTHESIS {printf("direct-declarator\n");}
+direct_declarator: ID { printf("direct-declarator for %s\n", $1->name);}
+                | ID OP_SQUARE_BRACKET INTEGER_CONSTANT CL_SQUARE_BRACKET {printf("direct-declarator %s\n", $1->name);}
+                | ID OP_PARENTHESIS parameter_list_opt CL_PARENTHESIS {printf("direct-declarator %s\n", $1->name);}
                 ;
 
 parameter_list_opt: parameter_list
