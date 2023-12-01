@@ -1,6 +1,7 @@
 %{
     #include <stdio.h>
     #include <stdlib.h>
+    #include <string.h>
     #include "6_A4_translator.h"
     /* The are the C declarations and definitions for the Bison file*/
     
@@ -138,9 +139,9 @@ pointer_opt: pointer
 pointer: OP_DEREF {printf("pointer\n");}
         ;
 
-direct_declarator: ID { printf("direct-declarator for %s\n", $1->name);}
-                | ID OP_SQUARE_BRACKET INTEGER_CONSTANT CL_SQUARE_BRACKET {printf("direct-declarator %s\n", $1->name);}
-                | ID OP_PARENTHESIS parameter_list_opt CL_PARENTHESIS {printf("direct-declarator %s\n", $1->name);}
+direct_declarator: ID { printf("direct-declarator for\n");}
+                | ID OP_SQUARE_BRACKET INTEGER_CONSTANT CL_SQUARE_BRACKET {printf("direct-declarator\n");}
+                | ID OP_PARENTHESIS parameter_list_opt CL_PARENTHESIS {printf("direct-declarator\n");}
                 ;
 
 parameter_list_opt: parameter_list
