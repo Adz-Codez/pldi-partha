@@ -16,31 +16,32 @@ extern char* yytext();
 symbolTable symtab[NSYMS];
 
 // Function to look up a symbol in the symbol table
-symbolTableEntry* symlook(char* s) {
+symbolTable* symlook(char* s) {
+    symbolTable* table;
     symbolTableEntry* entry;
 
     // Iterate over symbol tables
     for (int i = 0; i < NSYMS; i++) {
         // Check if the symbol already exists in the current table
-        for (entry = symtab[i].symbols; entry < &symtab[i].symbols[NSYMS]; entry++) {
+        for (entry = symtab[i].symbols; table->symbols < &symtab[i].symbols[NSYMS]; entry++) {
             if (entry->name && strcmp(entry->name, s) == 0)
-                return entry;
+                return table;
         }
 
-        // Check if there is space to append a new entry in the current table
+        // Check if there is space to append a new table in the current table
         for (entry = symtab[i].symbols; entry < &symtab[i].symbols[NSYMS]; entry++) {
             if (!entry->name) {
                 // Allocate memory for the symbol using strdup()
-                entry->name = strdup(s);
-                entry->symbol = (symbol*)malloc(sizeof(symbol)); // Allocate memory for the symbol
-                entry->symbol->name = entry->name; // Link the name in symbol to the entry name
-                entry->symbol->offset = 0; // Set initial offset
-                entry->symbol->nestedTable = NULL; // Initialize nested table to NULL (you can set it as needed)
-                entry->symbol->initVal = NULL; // Initialize initVal as needed
-                entry->symbol->isFunc = 0; // Initialize isFunc as needed
-                entry->symbol->size = 0; // Initialize size as needed
+                table->symbols->name = strdup(s);
+                table->symbols->symbol = (symbol*)malloc(sizeof(symbol)); // Allocate memory for the symbol
+                table->symbols->symbol->name = table->symbols->name; // Link the name in symbol to the table name
+                table->symbols->symbol->offset = 0; // Set initial offset
+                table->symbols->symbol->nestedTable = NULL; // Initialize nested table to NULL (you can set it as needed)
+                table->symbols->symbol->initVal = NULL; // Initialize initVal as needed
+                table->symbols->symbol->isFunc = 0; // Initialize isFunc as needed
+                table->symbols->symbol->size = 0; // Initialize size as needed
 
-                return entry;
+                return table;
             }
         }
     }
@@ -52,7 +53,7 @@ symbolTableEntry* symlook(char* s) {
 
 
 // Function to generate a temporary variable
-symbolTableEntry* gentemp() {
+symbolTable* gentemp() {
     static int c = 0; // Temp counter
     char str[10]; // Temp name
     // Generate temp name
