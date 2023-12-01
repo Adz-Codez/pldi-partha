@@ -5,7 +5,6 @@
     #include <stdlib.h>
 %}
 
-%option noyywrap
 
 DIGIT 0|([1-9][0-9]*)
 LETTER [_a-zA-Z]

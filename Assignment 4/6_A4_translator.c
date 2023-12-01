@@ -10,7 +10,7 @@
 extern int yyparse();
 extern int yylex();
 extern int yyget_leng();
-extern int yyget_text();
+extern char* yyget_text();
 
 // Array to represent the global symbol table
 symbolTable symtab[NSYMS];
@@ -196,7 +196,7 @@ void print_quad(quad* q, int index) {
             printf("%s = -%s\n", q->result, q->arg1);
             break;
         case MOD:
-            printf("%s = %s % %s\n", q->result, q->arg1, q->arg2);
+            printf("%s = %s %% %s\n", q->result, q->arg1, q->arg2);
             break;
         case MULT:
             printf("%s = %s * %s\n", q->result, q->arg1, q->arg2);
@@ -213,60 +213,13 @@ void print_quad(quad* q, int index) {
 
 
 int main(int argc, char *argv[]) {
-    char input[512];
-    char code[4096];
-    int codeIndex = 0;
-
-    if (argc == 2) {
-        // File input mode
-        FILE *file = fopen(argv[1], "r");
-        if (file == NULL) {
-            perror("Error opening file");
-            exit(EXIT_FAILURE);
-        }
-
-        // Read the file line by line
-        while (fgets(input, sizeof(input), file) != NULL) {
-            // Append the line to the code
-            strcpy(code + codeIndex, input);
-            codeIndex += strlen(input);
-        }
-
-        fclose(file);
-    } else if (argc == 1) {
-        // Interactive input mode
-        // Loop to take user input until "exit" is typed
-        printf("Enter your code line by line. Type 'exit' to start semantic analysis:\n");
-        while (1) {
-            // Read a line of input
-            if (fgets(input, sizeof(input), stdin) == NULL) {
-                printf("Error reading input.\n");
-                exit(EXIT_FAILURE);
-            }
-
-            // Check if the user wants to exit
-            if (strcmp(input, "exit\n") == 0) {
-                break;
-            }
-
-            // Append the line to the code
-            strcpy(code + codeIndex, input);
-            codeIndex += strlen(input);
-        }
-    } else {
-        // Incorrect usage
-        fprintf(stderr, "Usage: %s [input_file]\n", argv[0]);
-        exit(EXIT_FAILURE);
-    }
 
     // Call the lexer
-    yylex();
+    if (yylex() != 0) {
+    fprintf(stderr, "Lexer Error: Unable to lex the input: %s\n", yyget_text());
+    exit(EXIT_FAILURE);
+}
 
-    // Check lexer errors
-    if (yyget_leng() > 0) {
-        fprintf(stderr, "Lexer Error: %d\n", yyget_text());
-        exit(EXIT_FAILURE);
-    }
 
     // Call the parser
     if (yyparse() != 0) {

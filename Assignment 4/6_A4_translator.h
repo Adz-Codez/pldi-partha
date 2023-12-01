@@ -68,7 +68,7 @@ char* charToString(char c);
 char* symbolTypeToString(symType* type);
 
 // Function to print the symbol table
-void printSymbolTable(symbolTable* table);
+void printSymbolTable(symbolTable* table, const char* scope, const char* parent);
 
 // Structure to represent a quad
 typedef enum {
@@ -89,6 +89,6 @@ quad* new_quad_binary(opcodeType op1, char* result, char* arg1, char* arg2);
 
 quad* new_quad_unary(opcodeType op1, char* result, char* arg1);
 
-void print_quad(quad* q);
+void print_quad(quad* q, int index);
 
 #endif // __TRANSLATOR_H
