@@ -50,10 +50,10 @@ typedef struct SymbolTable {
 } symbolTable;
 
 // Function to look up a symbol in the symbol table
-symbolTableEntry* symlook(char* s);
+symbolTable* symlook(char* s);
 
 // Function to generate a temporary variable
-symbolTableEntry* gentemp();
+symbolTable* gentemp();
 
 // Updating the symbol table
 void updateSymbolTable(symbolTable* table);
