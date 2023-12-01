@@ -73,7 +73,9 @@ void printSymbolTable(symbolTable* table);
 // Structure to represent a quad
 typedef enum {
     PLUS = 1,
+    MINUS,
     UNARYMINUS,
+    MOD,
     MULT,
     DIV
 } opcodeType;

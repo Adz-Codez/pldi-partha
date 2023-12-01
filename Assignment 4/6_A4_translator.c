@@ -105,29 +105,27 @@ case ARRAY:
 
 
 // Function to print the symbol table
-void printSymbolTable(symbolTable* table) {
-    printf("===========================\n");
-    printf("Table Name: %s\t Parent Name: %s\n", table->name, (table->parent ? table->parent->name : "None"));
-    printf("===========================\n");
-    printf("%-20s%-20s%-20s%-20s%-20s%-20s\n", "Name", "Type", "Initial Value", "Offset", "Size", "Child");
+void printSymbolTable(symbolTable* table, const char* scope, const char* parent) {
+    printf("--------------------\n");
+    printf("ST:%s, Parent:%s\n", table->name, parent ? parent : "null");
+    printf("--------------------\n");
+    printf("%-20s%-20s%-20s%-20s\n", "Name", "Type", "Scope", "Nested ST");
 
     // Iterate over symbols in the current table
     for (int i = 0; i < NSYMS; i++) {
         if (table->symbols[i].name != NULL) {
             printf("%-20s", table->symbols[i].name);
-            fflush(stdout);
             printf("%-20s", (table->symbols[i].symbol->isFunc ? "function" : symbolTypeToString(table->symbols[i].symbol->type)));
-            printf("%-20s%-20d%-20d", table->symbols[i].symbol->initVal, table->symbols[i].symbol->offset, table->symbols[i].symbol->size);
-            printf("%-20s\n", (table->symbols[i].symbol->nestedTable ? table->symbols[i].symbol->nestedTable->name : "NULL"));
+            printf("%-20s%-20s\n", scope, (table->symbols[i].symbol->nestedTable ? table->symbols[i].symbol->nestedTable->name : "null"));
         }
     }
 
-    printf("===========================\n\n");
+    printf("--------------------\n\n");
 
     // Recursively print children tables
     for (int i = 0; i < NSYMS; i++) {
         if (table->symbols[i].name != NULL && table->symbols[i].symbol->nestedTable != NULL) {
-            printSymbolTable(table->symbols[i].symbol->nestedTable);
+            printSymbolTable(table->symbols[i].symbol->nestedTable, "local", table->name);
         }
     }
 }
@@ -184,28 +182,81 @@ quad *new_quad_unary(opcodeType op1, char *s1, char *s2) {
     return q;
 }
 
-int main() {
+void print_quad(quad* q, int index) {
+    printf("%d:\t", index);
+
+    switch (q->op) {
+        case PLUS:
+            printf("%s = %s + %s\n", q->result, q->arg1, q->arg2);
+            break;
+        case MINUS:
+            printf("%s = %s - %s\n", q->result, q->arg1, q->arg2);
+            break;
+        case UNARYMINUS:
+            printf("%s = -%s\n", q->result, q->arg1);
+            break;
+        case MOD:
+            printf("%s = %s % %s\n", q->result, q->arg1, q->arg2);
+            break;
+        case MULT:
+            printf("%s = %s * %s\n", q->result, q->arg1, q->arg2);
+            break;
+        case DIV:
+            printf("%s = %s / %s\n", q->result, q->arg1, q->arg2);
+            break;
+        // Add cases for other operators as needed
+        default:
+            printf("Unknown operation\n");
+            break;
+    }
+}
+
+
+int main(int argc, char *argv[]) {
     char input[512];
-    char code[4096]; 
+    char code[4096];
     int codeIndex = 0;
 
-    // Loop to take user input until "exit" is typed
-    printf("Enter your code line by line. Type 'exit' to start semantic analysis:\n");
-    while (1) {
-        // Read a line of input
-        if (fgets(input, sizeof(input), stdin) == NULL) {
-            printf("Error reading input.\n");
+    if (argc == 2) {
+        // File input mode
+        FILE *file = fopen(argv[1], "r");
+        if (file == NULL) {
+            perror("Error opening file");
             exit(EXIT_FAILURE);
         }
 
-        // Check if the user wants to exit
-        if (strcmp(input, "exit\n") == 0) {
-            break;
+        // Read the file line by line
+        while (fgets(input, sizeof(input), file) != NULL) {
+            // Append the line to the code
+            strcpy(code + codeIndex, input);
+            codeIndex += strlen(input);
         }
 
-        // Append the line to the code
-        strcpy(code + codeIndex, input);
-        codeIndex += strlen(input);
+        fclose(file);
+    } else if (argc == 1) {
+        // Interactive input mode
+        // Loop to take user input until "exit" is typed
+        printf("Enter your code line by line. Type 'exit' to start semantic analysis:\n");
+        while (1) {
+            // Read a line of input
+            if (fgets(input, sizeof(input), stdin) == NULL) {
+                printf("Error reading input.\n");
+                exit(EXIT_FAILURE);
+            }
+
+            // Check if the user wants to exit
+            if (strcmp(input, "exit\n") == 0) {
+                break;
+            }
+
+            // Append the line to the code
+            strcpy(code + codeIndex, input);
+            codeIndex += strlen(input);
+        }
+    } else {
+        // Incorrect usage
+        fprintf(stderr, "Usage: %s [input_file]\n", argv[0]);
+        exit(EXIT_FAILURE);
     }
 
     // Call the lexer
@@ -223,11 +274,15 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    // Example: Print symbol table
+    // print SymbolTable
     printf("Symbol Table:\n");
-    printSymbolTable(&symtab[0]); // Assuming symtab is your global symbol table
+    printSymbolTable(&symtab[0], "global", "null"); // Assuming symtab is your global symbol table
 
-   
+    // Print the TAC/quads
+    printf("TAC:\n");
+    for (int i = 0; i < quadIndex; i++) {
+        print_quad(&quadArray[i], i);
+    }
 
     // Free allocated memory
 
