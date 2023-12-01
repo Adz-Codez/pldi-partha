@@ -9,8 +9,8 @@
 
 extern int yyparse();
 extern int yylex();
-extern int yyget_leng();
-extern char* yyget_text();
+extern int yyleng();
+extern char* yytext();
 
 // Array to represent the global symbol table
 symbolTable symtab[NSYMS];
@@ -18,27 +18,30 @@ symbolTable symtab[NSYMS];
 // Function to look up a symbol in the symbol table
 symbolTableEntry* symlook(char* s) {
     symbolTableEntry* entry;
-    
-    // Check if the symbol already exists in the current table
-    for (entry = symtab->symbols; entry < &symtab->symbols[NSYMS]; entry++) {
-        if (entry->name && strcmp(entry->name, s) == 0)
-            return entry;
-    }
 
-    // Check if there is space to append a new entry
-    for (entry = symtab->symbols; entry < &symtab->symbols[NSYMS]; entry++) {
-        if (!entry->name) {
-            // Allocate memory for the symbol using strdup()
-            entry->name = strdup(s);
-            entry->symbol = (symbol*)malloc(sizeof(symbol)); // Allocate memory for the symbol
-            entry->symbol->name = entry->name; // Link the name in symbol to the entry name
-            entry->symbol->offset = 0; // Set initial offset
-            entry->symbol->nestedTable = NULL; // Initialize nested table to NULL (you can set it as needed)
-            entry->symbol->initVal = NULL; // Initialize initVal as needed
-            entry->symbol->isFunc = 0; // Initialize isFunc as needed
-            entry->symbol->size = 0; // Initialize size as needed
+    // Iterate over symbol tables
+    for (int i = 0; i < NSYMS; i++) {
+        // Check if the symbol already exists in the current table
+        for (entry = symtab[i].symbols; entry < &symtab[i].symbols[NSYMS]; entry++) {
+            if (entry->name && strcmp(entry->name, s) == 0)
+                return entry;
+        }
 
-            return entry;
+        // Check if there is space to append a new entry in the current table
+        for (entry = symtab[i].symbols; entry < &symtab[i].symbols[NSYMS]; entry++) {
+            if (!entry->name) {
+                // Allocate memory for the symbol using strdup()
+                entry->name = strdup(s);
+                entry->symbol = (symbol*)malloc(sizeof(symbol)); // Allocate memory for the symbol
+                entry->symbol->name = entry->name; // Link the name in symbol to the entry name
+                entry->symbol->offset = 0; // Set initial offset
+                entry->symbol->nestedTable = NULL; // Initialize nested table to NULL (you can set it as needed)
+                entry->symbol->initVal = NULL; // Initialize initVal as needed
+                entry->symbol->isFunc = 0; // Initialize isFunc as needed
+                entry->symbol->size = 0; // Initialize size as needed
+
+                return entry;
+            }
         }
     }
 
@@ -46,6 +49,7 @@ symbolTableEntry* symlook(char* s) {
     printf("Too many symbols\n");
     exit(1);
 }
+
 
 // Function to generate a temporary variable
 symbolTableEntry* gentemp() {
@@ -228,9 +232,10 @@ void print_quad(quad* q, int index) {
 
 int main(int argc, char *argv[]) {
 
-    /*// Call the lexer
+    // Call the lexer
     if (yylex() != 0) {
-    fprintf(stderr, "Lexer Error: Unable to lex the input: %s\n", yyget_text());
+    fprintf(stderr, "Lexer Error: Unable to lex the input: %s\n", yytext());
+    printf("Line no: %d", yyleng());
     exit(EXIT_FAILURE);
 }
 
@@ -239,10 +244,10 @@ int main(int argc, char *argv[]) {
     if (yyparse() != 0) {
         fprintf(stderr, "Parser Error: Unable to parse the input.\n");
         exit(EXIT_FAILURE);
-    }*/
+    }
 
-    yylex();
-    yyparse();
+/*     yylex();
+    yyparse(); */
 
     // print SymbolTable
     printf("Symbol Table:\n");
