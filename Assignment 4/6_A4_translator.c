@@ -8,51 +8,9 @@
 #include <stdlib.h>
 
 extern int yyparse();
-
-// Let us create some basic structures and definitions for the translator
-// Define the maximum number of symbols (arbitrary)
-#define NSYMS 250
-
-// Enum to represent different types of symbols
-typedef enum {
-    CHAR,
-    INT,
-    POINTER,
-    ARRAY,
-    FUNCTION,
-    BLOCK
-} typeEnum;
-
-// Representing a symbol type
-typedef struct symbolType {
-    typeEnum type;
-    struct symbolType* arrayType;
-    int width;
-} symType;
-
-// Representing a symbol
-typedef struct Symbol {
-    char* name;
-    symType* type;
-    int offset;
-    struct SymbolTable* nestedTable;
-    char* initVal;
-    int isFunc;
-    int size;
-} symbol;
-
-// Representing a symbol table entry
-typedef struct SymbolTableEntry {
-    char* name;
-    symbol* symbol;
-} symbolTableEntry;
-
-// Struct to represent a symbol table
-typedef struct SymbolTable {
-    char* name;
-    struct SymbolTable* parent;
-    symbolTableEntry symbols[NSYMS];
-} symbolTable;
+extern int yylex();
+extern int yyget_leng();
+extern int yyget_text();
 
 // Array to represent the global symbol table
 symbolTable symtab[NSYMS];
@@ -109,14 +67,14 @@ void updateSymbolTable(symbolTable* table) {
 // Output: symbol table
 
 // Function to convert int to string
-char* toString(int i) {
+char* intToString(int i) {
     char* result;
     asprintf(&result, "%d", i);
     return result;
 }
 
 // Function to convert char to string
-char* toString(char c) {
+char* charToString(char c) {
     char* result;
     asprintf(&result, "%c", c);
     return result;
@@ -130,8 +88,16 @@ char* symbolTypeToString(symType* type) {
         case INT:
         case POINTER:
             return "int";
-        case ARRAY:
-            return asprintf("array(%s, %s)", toString(type->width), symbolTypeToString(type->arrayType));
+case ARRAY:
+	{
+		char* arrayTypeString = symbolTypeToString(type->arrayType);
+		char* widthString = intToString(type->width);
+		char* result;
+		asprintf(&result, "array(%s, %s)", widthString, arrayTypeString);
+		free(arrayTypeString);
+		free(widthString);
+		return result;
+	}
         default:
             return "unknown";
     }
@@ -247,7 +213,7 @@ int main() {
 
     // Check lexer errors
     if (yyget_leng() > 0) {
-        fprintf(stderr, "Lexer Error: %s\n", yyget_text());
+        fprintf(stderr, "Lexer Error: %d\n", yyget_text());
         exit(EXIT_FAILURE);
     }
 
@@ -261,11 +227,7 @@ int main() {
     printf("Symbol Table:\n");
     printSymbolTable(&symtab[0]); // Assuming symtab is your global symbol table
 
-    // Example: Print quads
-    printf("\nGenerated Quads:\n");
-    for (int i = 0; i < quadIndex; i++) {
-        printf("%d: %s %s %s %s\n", i, opcodeToString(quadArray[i].op), quadArray[i].result, quadArray[i].arg1, quadArray[i].arg2);
-    }
+   
 
     // Free allocated memory
 

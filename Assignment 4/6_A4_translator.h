@@ -14,6 +14,10 @@ typedef enum {
     BLOCK
 } typeEnum;
 
+// Let us create some basic structures and definitions for the translator
+// Define the maximum number of symbols (arbitrary)
+#define NSYMS 100
+
 // Representing a symbol type
 typedef struct symbolType {
     typeEnum type;
@@ -55,10 +59,10 @@ symbolTable* gentemp();
 void updateSymbolTable(symbolTable* table);
 
 // Function to convert int to string
-char* toString(int i);
+char* intToString(int i);
 
 // Function to convert char to string
-char* toString(char c);
+char* charToString(char c);
 
 // Function to convert SymbolType to string
 char* symbolTypeToString(symType* type);
@@ -68,30 +72,10 @@ void printSymbolTable(symbolTable* table);
 
 // Structure to represent a quad
 typedef enum {
-    OP_PLUS = 1,
-    OP_MINUS,
-    OP_MULT,
-    OP_DIV,
-    OP_UNARYMINUS,
-    OP_COPY,
-    OP_DEREF,
-    OP_SIGNP,
-    OP_SIGNN,
-    OP_NOT,
-    OP_ADDR,
-    OP_SLASH,
-    OP_MOD,
-    OP_SLESS,
-    OP_SGREAT,
-    OP_LEQ,
-    OP_GEQ,
-    OP_EQUALITY,
-    OP_NEQ,
-    OP_AND,
-    OP_OR,
-    OP_COLON,
-    OP_QUES,
-    OP_ASSIGN
+    PLUS = 1,
+    UNARYMINUS,
+    MULT,
+    DIV
 } opcodeType;
 
 typedef struct quad {

@@ -16,13 +16,13 @@
     // We also need pointer/index to the next quad
     int nextquad = 0;
 
-    symboltable* symTable; // Include symbol table if needed for parsing
+    symbolTable* symTable; // Include symbol table if needed for parsing
 %}
 
 %union {
     int intval;
     char *strval;
-    symboltable *symp;
+    symbolTable *symp;
 }
 
 %token <symp> ID

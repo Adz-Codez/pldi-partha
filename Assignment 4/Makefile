@@ -24,8 +24,8 @@ build: clean compile
 
 compile: $(EXECUTABLE)
 
-$(EXECUTABLE): $(FLEX_OUTPUT) $(BISON_OUTPUT) $(ACTION_FILE) $(HEADER_FILE)
-	$(CC) -o $@ $^ -lfl $(CFLAGS)
+$(EXECUTABLE): $(ACTION_FILE) $(BISON_OUTPUT) $(FLEX_OUTPUT)
+	$(CC) $^ -lfl $(CFLAGS) -o $@
 
 $(BISON_OUTPUT): $(BISON_FILE)
 	bison $(BISON_FLAGS) $<

@@ -108,7 +108,3 @@ M_COMMENTS \/\*([^*]|\*[^/])*\*\/
 . { yyterminate(); /* using yyterminate() to stop the execution of the lexer */}
 
 %%
-
-int yywrap() {
-    return 1;
-}
